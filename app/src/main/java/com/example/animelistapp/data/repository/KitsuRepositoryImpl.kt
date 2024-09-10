@@ -4,21 +4,24 @@ import com.example.animelistapp.data.network.KitsuApi
 import com.example.animelistapp.domain.model.AnimeData
 import com.example.animelistapp.domain.repository.KitsuRepository
 import com.skydoves.sandwich.onSuccess
+import javax.inject.Inject
 
-class KitsuRepositoryImpl(val api: KitsuApi) : KitsuRepository {
+class KitsuRepositoryImpl @Inject constructor(
+    private val api: KitsuApi
+) : KitsuRepository {
 
-    override fun getTrendingAnimeList(): List<AnimeData> {
-        var animeList : List<AnimeData> = emptyList()
+    override suspend fun getTrendingAnimeList(): List<AnimeData> {
+        var animeData: List<AnimeData> = emptyList()
         api.getTrendingAnimeList()
             .onSuccess {
-                animeList = data.data.map { it.toModel() }
+                animeData = data.data.map { it.toModel() }
             }
 
-        return animeList
+        return animeData
     }
 
-    override fun getAnimeById(id: Int): AnimeData? {
-        var anime : AnimeData? = null
+    override suspend fun getAnimeById(id: Int): AnimeData? {
+        var anime: AnimeData? = null
 
         api.getAnimeById(id)
             .onSuccess {
