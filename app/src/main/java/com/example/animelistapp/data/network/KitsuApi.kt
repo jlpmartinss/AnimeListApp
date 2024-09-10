@@ -9,10 +9,10 @@ import retrofit2.http.Path
 interface KitsuApi {
 
     @GET("trending/anime")
-    fun getTrendingAnimeList(): ApiResponse<TrendingAnimeListDto>
+    suspend fun getTrendingAnimeList(): ApiResponse<TrendingAnimeListDto>
 
     @GET("anime/{id}")
-    fun getAnimeById(@Path("id") id: Int): ApiResponse<AnimeResponseDto?>
+    suspend fun getAnimeById(@Path("id") id: Int): ApiResponse<AnimeResponseDto?>
 
     companion object {
         const val BASE_URL = "https://kitsu.io/api/edge/"
