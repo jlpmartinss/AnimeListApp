@@ -4,7 +4,7 @@ import com.example.animelistapp.domain.model.AnimeData
 
 interface KitsuRepository {
 
-    fun getTrendingAnimeList(): List<AnimeData>
+    suspend fun getTrendingAnimeList(): List<AnimeData>
 
-    fun getAnimeById(id: Int): AnimeData?
+    suspend fun getAnimeById(id: Int): AnimeData?
 }
