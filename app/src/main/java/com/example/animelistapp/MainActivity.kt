@@ -2,49 +2,71 @@ package com.example.animelistapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.example.animelistapp.ui.screen.anime.AnimeScreen
+import com.example.animelistapp.ui.screen.trending_anime.TrendingAnimeListScreen
 import com.example.animelistapp.ui.theme.AnimeListAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.Serializable
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                android.graphics.Color.TRANSPARENT
+            )
+        )
+
         setContent {
             AnimeListAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                SharedTransitionLayout {
+                    NavHost(navController = navController, startDestination = TrendingAnimeRoute) {
+                        composable<TrendingAnimeRoute> {
+                            TrendingAnimeListScreen(
+                                onAnimeClick = { cover, id ->
+                                    navController.navigate(
+                                        AnimeRoute(
+                                            id = id.toString(),
+                                            coverImage = cover.toString()
+                                        )
+                                    )
+                                },
+                                animatedVisibilityScope = this
+                            )
+                        }
+                        composable<AnimeRoute> {
+                            val args = it.toRoute<AnimeRoute>()
+
+                            AnimeScreen(
+                                id = args.id,
+                                coverImage = args.coverImage,
+                                animatedVisibilityScope = this
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+@Serializable
+data object TrendingAnimeRoute
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AnimeListAppTheme {
-        Greeting("Android")
-    }
-}
+
+@Serializable
+data class AnimeRoute(val id: String, val coverImage: String)
