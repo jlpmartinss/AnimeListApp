@@ -35,8 +35,6 @@ The **TrendingAnimeListScreen** displays a list of trending anime, each showing:
 - **Retrofit**: Used for making HTTP requests to the Kitsu API.
 - **Moshi**: A library used for JSON serialization/deserialization with Retrofit.
 - **OkHttp**: Used as the HTTP client, with logging interceptors for debugging network calls.
-- **Room**: For local database caching to support offline mode.
-- **Kotlin Coroutines**: To handle asynchronous tasks.
 - **Coil**: For loading images from URLs into the UI.
 
 ## Build and Project Setup
