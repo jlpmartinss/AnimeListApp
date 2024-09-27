@@ -44,7 +44,6 @@ This project uses **Jetpack Compose** for UI and follows the **MVVM** architectu
 
 - **Dagger Hilt** for dependency injection.
 - **Retrofit** and **Moshi** for API calls and JSON parsing.
-- **Room** for offline caching and local database.
 - **Coil** for image loading.
 
 ## Getting Started
